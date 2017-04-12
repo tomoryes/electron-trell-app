@@ -1,8 +1,8 @@
 # TrelloApp
 
-# how to use
+## how to use
 
-- Start-up
+- start up
 ```
 sh ./packaging.sh
 ```
