@@ -1,0 +1,5 @@
+# TrelloApp
+
+
+#### NOTE
+for mac...
