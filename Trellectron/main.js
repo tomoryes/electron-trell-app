@@ -3,31 +3,31 @@
 // Electronのモジュール
 const electron = require("electron");
 
-
 // アプリケーションをコントロールするモジュール
-const app = electron.app;
-
+const App = electron.app;
 // ウィンドウを作成するモジュール
 const BrowserWindow = electron.BrowserWindow;
-
-const menu = electron.Menu;
+// メニュー表示用モジュール
+const Menu = electron.Menu;
+// ステータスバーへのアイコンを表示するモジュール
+const Tray = electron.Tray;
 
 // メインウィンドウはGCされないようにグローバル宣言
 let mainWindow;
 
-
 // 全てのウィンドウが閉じたら終了
-app.on('window-all-closed', function() {
+App.on('window-all-closed', function() {
     if (process.platform != 'darwin') {
-        app.quit();
+        App.quit();
     }
 });
 
 // Electronの初期化完了後に実行
-app.on('ready', function() {
+App.on('ready', function() {
 
     initializeWindow();
-    installMenu();
+    setupMenu();
+    setupStatusBarIcon();
 });
 
 
@@ -42,6 +42,7 @@ function initializeWindow() {
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
+
 }
 
 
@@ -49,8 +50,7 @@ function initializeWindow() {
  *  コピー＆ペーストを実装する
  *  see http://hacknote.jp/archives/16729/
  */
-function installMenu()
-{
+function setupMenu() {
     var template = [{
         label: "Application",
         submenu: [{
@@ -64,7 +64,7 @@ function installMenu()
                 label: "Quit",
                 accelerator: "Command+Q",
                 click: function() {
-                    app.quit();
+                    App.quit();
                 }
             }
         ]
@@ -106,5 +106,44 @@ function installMenu()
         ]
     }];
 
-    menu.setApplicationMenu(menu.buildFromTemplate(template));
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
+
+function setupStatusBarIcon() {
+    // メニューアイコン設定
+    var appIcon = new Tray(__dirname + '/../icon.png');
+    // コンテキストメニュー追加
+    var contextMenu = Menu.buildFromTemplate([{
+            label: '選択メニュー1',
+            type: 'radio'
+        },
+        {
+            label: '選択メニュー2',
+            type: 'radio'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: 'サブメニュー',
+            submenu: [{
+                    label: 'サブメニュー1'
+                },
+                {
+                    label: 'サブメニュー2'
+                }
+            ]
+        },
+        {
+            label: '終了',
+            accelerator: 'Command+Q',
+            click: function() {
+                App.quit();
+            }
+        }
+    ]);
+    appIcon.setContextMenu(contextMenu);
+    // アイコンにマウスオーバーした時の説明
+    appIcon.setToolTip('This is sample.');
 }
