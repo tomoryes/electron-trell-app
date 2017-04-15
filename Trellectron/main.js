@@ -89,7 +89,7 @@ function setupMenu() {
                 },
                 {
                     label: "Quit",
-                    accelerator: "Command+Q",
+                    accelerator: "Cmd+Q",
                     click: function() {
                         app.quit();
                     }
@@ -100,12 +100,12 @@ function setupMenu() {
             label: "Edit",
             submenu: [{
                     label: "Undo",
-                    accelerator: "CmdOrCtrl+Z",
+                    accelerator: "Cmd+Z",
                     selector: "undo:"
                 },
                 {
                     label: "Redo",
-                    accelerator: "Shift+CmdOrCtrl+Z",
+                    accelerator: "Shift+Cmd+Z",
                     selector: "redo:"
                 },
                 {
@@ -113,22 +113,22 @@ function setupMenu() {
                 },
                 {
                     label: "Cut",
-                    accelerator: "CmdOrCtrl+X",
+                    accelerator: "Cmd+X",
                     selector: "cut:"
                 },
                 {
                     label: "Copy",
-                    accelerator: "CmdOrCtrl+C",
+                    accelerator: "Cmd+C",
                     selector: "copy:"
                 },
                 {
                     label: "Paste",
-                    accelerator: "CmdOrCtrl+V",
+                    accelerator: "Cmd+V",
                     selector: "paste:"
                 },
                 {
                     label: "Select All",
-                    accelerator: "CmdOrCtrl+A",
+                    accelerator: "Cmd+A",
                     selector: "selectAll:"
                 }
             ]
@@ -150,7 +150,7 @@ function setupMenu() {
                 },
                 {
                     label: 'Toggle DevTools',
-                    accelerator: 'Alt+Command+I',
+                    accelerator: 'Alt+Cmd+I',
                     click: function() {
                         BrowserWindow.getFocusedWindow().toggleDevTools();
                     }
@@ -169,8 +169,8 @@ function setupStatusBarIcon() {
     // メニューアイコン設定
     appIcon = new Tray(__dirname + '/img/statusbar_icon.png');
     // コンテキストメニュー追加
-    var contextMenu = Menu.buildFromTemplate([{
-        label: 'Today',
+    var template = [{
+        label: 'Today Task',
         submenu: [{
                 label: 'サブメニュー1',
                 click: function() {
@@ -183,7 +183,7 @@ function setupStatusBarIcon() {
                     console.log('foooo');
                 }
             }
-        ]
-    }, ]);
-    appIcon.setContextMenu(contextMenu);
+        ],
+    }];
+    appIcon.setContextMenu(Menu.buildFromTemplate(template));
 }
