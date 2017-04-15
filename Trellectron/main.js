@@ -136,12 +136,16 @@ function setupMenu() {
         {
             label: "Window",
             submenu: [{
-                label: "Close",
-                accelerator: "Cmd+W",
-                click: function() {
-                    mainWindow.hide();
-                }
-            }]
+	                label: "Close",
+	                accelerator: "Cmd+W",
+	                role:"close"
+				},
+				{
+	                label: "Minimize",
+	                accelerator: "Cmd+M",
+					role:"minimize"
+				}
+            ]
         }
     ];
 
