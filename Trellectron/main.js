@@ -167,7 +167,7 @@ function setupMenu() {
  */
 function setupStatusBarIcon() {
     // メニューアイコン設定
-    appIcon = new Tray(__dirname + '/img/icon.png');
+    appIcon = new Tray(__dirname + '/img/statusbar_icon.png');
     // コンテキストメニュー追加
     var contextMenu = Menu.buildFromTemplate([{
         label: 'Today',
