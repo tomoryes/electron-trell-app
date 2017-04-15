@@ -4,7 +4,7 @@
 const electron = require("electron");
 
 // アプリケーションをコントロールするモジュール
-const App = electron.app;
+const app = electron.app;
 // ウィンドウを作成するモジュール
 const BrowserWindow = electron.BrowserWindow;
 // メニュー表示用モジュール
@@ -23,7 +23,7 @@ let willQuitApp = false;
 
 
 // Electronの初期化完了後に実行
-App.on('ready', function() {
+app.on('ready', function() {
     setupMenu();
     setupStatusBarIcon();
     initializeWindow();
@@ -53,17 +53,17 @@ function initializeWindow() {
  ************************/
 
 // 全てのウィンドウが閉じたら終了
-App.on('window-all-closed', function() {
+app.on('window-all-closed', function() {
     if (process.platform != 'darwin') {
-        App.quit();
+        app.quit();
     }
 });
 
-App.on('activate', function() {
+app.on('activate', function() {
     mainWindow.show();
 });
 
-App.on('before-quit', function() {
+app.on('before-quit', function() {
     willQuitApp = true
 });
 
@@ -91,7 +91,7 @@ function setupMenu() {
                     label: "Quit",
                     accelerator: "Command+Q",
                     click: function() {
-                        App.quit();
+                        app.quit();
                     }
                 }
             ]
@@ -136,15 +136,25 @@ function setupMenu() {
         {
             label: "Window",
             submenu: [{
-	                label: "Close",
-	                accelerator: "Cmd+W",
-	                role:"close"
-				},
-				{
-	                label: "Minimize",
-	                accelerator: "Cmd+M",
-					role:"minimize"
-				}
+                    label: "Close",
+                    accelerator: "Cmd+W",
+                    role: "close"
+                },
+                {
+                    label: "Minimize",
+                    accelerator: "Cmd+M",
+                    role: "minimize"
+                },
+                {
+                    type: "separator"
+                },
+                {
+                    label: 'Toggle DevTools',
+                    accelerator: 'Alt+Command+I',
+                    click: function() {
+                        BrowserWindow.getFocusedWindow().toggleDevTools();
+                    }
+                }
             ]
         }
     ];
