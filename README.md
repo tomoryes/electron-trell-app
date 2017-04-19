@@ -1,4 +1,4 @@
-# TrelloApp
+# Trellectron
 
 ## how to use
 
