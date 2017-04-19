@@ -25,10 +25,14 @@ let willQuitApp = false;
 // Electronの初期化完了後に実行
 app.on('ready', function() {
     setupMenu();
-    setupStatusBarIcon();
+    // setupStatusBarIcon();
     initializeWindow();
 });
 
+/************************
+ * initialization
+ ************************/
+ 
 function initializeWindow() {
     // メイン画面の表示。ウィンドウの幅、高さを指定できる
     mainWindow = new BrowserWindow({
