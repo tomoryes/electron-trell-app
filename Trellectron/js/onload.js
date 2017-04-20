@@ -1,13 +1,107 @@
 const electron = require('electron');
 const shell = electron.shell;
 
+var boards = [];
 onload = function()
 {
+	var view = this;
     console.log('loading');
 
-	// リンクをクリックしたら外部ブラウザで開く設定
-    var webview = document.getElementById("main-window-webview");
-    webview.addEventListener('new-window', function(e) {
-        shell.openExternal(e.url);
+	initializeTrello();
+	console.log(view.boards);
+	// see http://blog.yuhiisk.com/archive/2014/12/20/dynamic-loading-and-complete-processing-of-script.html
+	loadScript("https://trello.com/b/lFSQcvu1/tunnel", function() {
+	    console.log('script loaded');
+
+		var webview = document.querySelector('webview');
+		webview.addEventListener("did-finish-load", function(){
+			webview.insertCSS("#board{ flex-direction: row; flex-wrap: wrap; overflow-x: hidden !important; overflow-y: auto !important; display: flex; align-content: flex-start; }");
+			webview.insertCSS("#board .list-wrapper{ margin: 0 0 10px 10px; height: auto; }");
+			webview.insertCSS("#board .list-wrapper .js-list-content{ max-height: 40vh; }");
+		});
+		
+		// リンクをクリックしたら外部ブラウザで開く設定
+		var mainview = document.getElementById("main-window-webview");
+	    mainview.addEventListener('new-window', function(e) {
+	        shell.openExternal(e.url);
+	    });
+	});
+}
+
+
+function loadScript(src, callback) {
+
+	var webview = document.createElement('webview');
+	webview.src = src;
+	webview.id = "main-window-webview";
+	document.body.appendChild(webview);
+
+    callback();
+}
+
+
+function initializeTrello()
+{
+    Trello.authorize({
+        interactive: true,
+        type: "popup",
+        expiration: "never",
+        name: "surveyrequest",
+        persist: "true",
+        success: function() {
+            onAuthorizeSuccessful();
+        },
+        error: function() {
+            onFailedAuthorization();
+        },
+        scope: {
+            read: true,
+            write: true
+        },
     });
+
+}
+
+function onAuthorizeSuccessful()
+{
+    console.log('Successful authentication');
+	getAllBoards();
+}
+
+function onFailedAuthorization()
+{
+    console.log('Failed authentication');
+}
+
+var success = function(response)
+{
+	console.log('success!');
+	console.log(response);
+	fetchBoardsInfo(response);
+};
+
+var error = function(response)
+{
+	console.log('faild');
+	console.log(response);
+};
+
+function getAllBoards()
+{
+	Trello.get('/member/me/boards', success, error);
+}
+
+function fetchBoardsInfo(response)
+{
+	var view = this;
+	
+	var board_obj;
+	response.forEach(function(board) {
+		if (!board.closed) {
+			board_obj = new Object();
+			board_obj.name = board.name;
+			board_obj.url = board.url;
+			view.boards.push(board_obj)
+		}
+	});
 }
