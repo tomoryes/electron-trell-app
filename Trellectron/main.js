@@ -158,12 +158,20 @@ function setupMenu() {
                     click: function() {
                         BrowserWindow.getFocusedWindow().toggleDevTools();
                     }
-                }
+                },
+				{
+					label:"Zoom In",
+					role: "zoomin"
+				},
+				{
+					label:"Zoom Out",
+					role: "zoomout"
+				}
             ]
         }
     ];
-
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+	
+	Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 /**
